@@ -46,7 +46,7 @@ var app = angular.module("Ctrl", [])
                 if (response.data.message > 0) {
                     $scope.DataInput.IdPegawai = response.data.message;
                     $scope.DatasPegawai.push(angular.copy($scope.DataInput));
-                    location.reload();
+                    document.location.reload(true);
                 }
                 // $scope.DataInput = {};
 
