@@ -54,17 +54,79 @@ var app = angular.module("Ctrl", [])
             })
         }
     })
-    .controller("AbsenController", function ($http, $scope, $timeout) {
-        $scope.clock = "loading clock..."; // initialise the time variable
-        $scope.tickInterval = 1000 //ms
+    .controller("AbsenController", function ($http, $scope, $timeout, $filter) {
+        $scope.DatasPegawai = [];
+        $scope.DatasAbsen = [];
+        $scope.selected = {};
+        $scope.DataInput = {};
+        $scope.TanggalAbsen="";
+        var myMonths = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        var month = new Date().getMonth();
+        var thisDay = new Date().getDay();
+        var xtahun = new Date().getYear();
+        var tahun = (xtahun < 1000)?xtahun + 1900 : xtahun;
+        $scope.Bulan = myMonths[month];
+        $scope.Hari = myDays[thisDay]; 
+        var Tgl =new Date().getDate();
+        $scope.TanggalAbsen = $scope.Hari+", "+Tgl+" "+$scope.Bulan+" "+tahun;
 
-        var tick = function () {
-            $scope.clock = Date.now() // get the current time
-            $timeout(tick, $scope.tickInterval); // reset the timer
+        $scope.Init = function () {
+            var Url = "api/datas/reads/ReadPegawai.php";
+            $http({
+                method: "GET",
+                url: Url
+            }).then(function (response) {
+                $scope.DatasPegawai = response.data.records;
+                $http.get("api/datas/reads/ReadAbsen.php")
+                    .then(function (response) {
+                        $scope.DatasAbsen = response.data.records;
+                    });
+            }, function (error) {
+                alert(response.error);
+            })
         }
 
-        // Start the timer
-        $timeout(tick, $scope.tickInterval);
+        $scope.Simpan = function () {
+            var JamSistem = Date.now();
+            $scope.Tanggal = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.Jam = $filter('date')(new Date(), 'HH:mm:ss');
+            $scope.DataInput.IdPegawai = $scope.selected.IdPegawai;
+            $scope.DataInput.Tanggal = $scope.Tanggal;
+            $scope.DataInput.Jam = $scope.Jam;
+            var Url = "api/datas/creates/CreateAbsenAdmin.php";
+            var Data = angular.copy($scope.DataInput);
+            $http({
+                method: "POST",
+                url: Url,
+                data: Data
+            }).then(function (response) {
+                if (response.status == 200) {
+                    if(response.data.Status=="Insert"){
+                        var a = angular.copy(response.data);
+                        angular.forEach($scope.DatasPegawai, function(value, key){
+                            if(value.IdPegawai==a.IdPegawai){
+                                a.Nama= value.Nama;
+                                a.NIP = value.NIP;
+                            }
+                        });
+                        $scope.DatasAbsen.push(angular.copy(a));
+                    }else{
+                        var a = angular.copy(response.data);
+                        angular.forEach($scope.DatasAbsen, function(value, key){
+                            if(value.IdPegawai==$scope.DataInput.IdPegawai){
+                                value.JamPulang = a.JamPulang;
+                            }
+                        });
+                    }
+                }else{
+                    alert(response.data.message);
+                }
+
+            }, function (error) {
+                alert(error.data.message);
+            })
+        }
     })
     .controller("LaporanController", function ($scope, $http) {
         $scope.DatasLaporan = [];
@@ -91,14 +153,29 @@ var app = angular.module("Ctrl", [])
                     $scope.DatasLaporan = response.data.records;
                 });
             }
-
-
+        }
+        $scope.GetBulan = function (){
+            $http({
+                method: "POST",
+                url: "api/datas/reads/ReadLaporanBulanan.php",
+                data: $scope.selected
+            }).then(function (response) {
+                $scope.DatasLaporan = response.data.records;
+            });
+        }
+        $scope.printToCart = function (printSectionId) {
+            var innerContents = document.getElementById(printSectionId).innerHTML;
+            var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+            popupWinindow.document.open();
+            popupWinindow.document.write('<html><head><link href="assets/index/css/bootstrap.min.css" rel="stylesheet"></head><body onload="window.print()"><div>' + innerContents + '</html>');
+            popupWinindow.document.close();
         }
     })
-    .controller("ControllerLaporan", function($scope, $http){
+    .controller("ControllerLaporan", function ($scope, $http) {
         $DatasLaporan = [];
         $http.get("../../../api/datas/reads/ReadLaporanPegawai.php")
-        .then(function(response){
-            $scope.DatasLaporan = response.data.records;
-        })
+            .then(function (response) {
+                $scope.DatasLaporan = response.data.records;
+                onload=window.print();
+            })
     });

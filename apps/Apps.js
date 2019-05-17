@@ -14,7 +14,7 @@ app.config(function($routeProvider) {
             controller: "PenggunaController"
         })
         .when("/Absen", {
-            templateUrl: "apps/views/Absen.html",
+            templateUrl: "apps/views/AbsenAdmin.html",
             controller: "AbsenController"
         })
         .when("/Laporan", {

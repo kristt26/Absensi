@@ -14,7 +14,7 @@ $absen = new Absen($db);
 $data = json_decode(file_get_contents("php://input"));
 if (!empty($data->IdPegawai)) {
 // $TanggalSistem = create_da
-    $Tgl = date('Y-m-d') . " " . "07:30:00";
+    $Tgl = date('Y-m-d') . " " . "08:30:00";
     $JamDatang = new DateTime($Tgl);
     $JamPulang = new DateTime(date('Y-m-d') . " " . "15:00:00");
     $TglSistem = new DateTime();
@@ -67,7 +67,7 @@ if (!empty($data->IdPegawai)) {
                 $absen->IdPegawai = $data->IdPegawai;
                 $absen->Tanggal = date('Y-m-d');
                 $absen->JamDatang = date('H:i:s');
-                $absen->Keterangan = "H";
+                $absen->Keterangan = "A";
                 if ($absen->create()) {
                     $DataPegawai = array(
                         'IdAbsen' => $absen->IdAbsen,

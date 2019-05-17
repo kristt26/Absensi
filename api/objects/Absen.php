@@ -57,6 +57,17 @@ class Absen
         return $stmt;
     }
 
+    public function readByDates($TglAkhir)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE Tanggal BETWEEN ? AND ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->Tanggal);
+        $stmt->bindParam(2, $TglAkhir);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
     public function create()
     {
         $query = "INSERT INTO " . $this->table_name . " SET IdPegawai=?, Tanggal=?, JamDatang=?, JamPulang=?, Terlambat=?, Keterangan=?";

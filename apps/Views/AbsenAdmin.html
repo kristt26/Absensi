@@ -1,0 +1,65 @@
+<div ng-init="Init()">
+        <div class="row">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+    
+                    <div class="modal-header">
+                        Absensi
+                    </div>
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left"
+                        ng-submit="Simpan()">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="NIP">NIP<span
+                                        class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control col-md-7 col-xs-12"
+                                        ng-options="item as item.Nama for item in DatasPegawai track by item.Nama"
+                                        ng-model="selected" required></select>
+                                    <!-- <input type="text" id="NIP" required="required" ng-model="DataInput.NIP" class="form-control col-md-7 col-xs-12"> -->
+                                </div>
+                            </div>
+    
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Absen</button>
+                            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button> -->
+                        </div>
+                    </form>
+    
+    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <center>
+                <h2>Daftar Absen Pegawai <br>{{TanggalAbsen}}</h2>
+            </center>
+            <table class="table table-bordered" witdh="50%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>NIP</th>
+                        <th>Nama</th>
+                        <th>Jam Datang</th>
+                        <th>Jam Pulang</th>
+                        <th>Terlambat</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in DatasAbsen">
+                        <th scope="row">{{$index+1}}</th>
+                        <td>{{item.NIP}}</td>
+                        <td>{{item.Nama}}</td>
+                        <td>{{item.JamDatang}}</td>
+                        <td>{{item.JamPulang}}</td>
+                        <td>{{item.Terlambat}}</td>
+                        <td>{{item.Keterangan}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>

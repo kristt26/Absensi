@@ -18,33 +18,41 @@ $b = (int) $data->Id;
 $a = $b + 1;
 $Bulan = $DataBulanInggris[$b];
 $absen->Tanggal = date('Y') . "-" . "0" . $a . "-" . "01";
-$absen->IdPegawai=$data->IdPegawai;
 $c = "last day of " . $Bulan . " " . date('Y');
 $TanggalAkhir = date('Y-m-d', strtotime($c));
-$stmt = $absen->readByRanges($TanggalAkhir);
+$stmt = $absen->readByDates($TanggalAkhir);
 $RowAbsen = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $stmt = $pegawai->read();
 $RowPegawai = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // if ($num > 0) {
 $Datas = array("records" => array());
-foreach ($RowAbsen as &$valueAbsen) {
-    $DataAbsen = array(
-        'IdAbsen' => $valueAbsen['IdAbsen'],
-        'IdPegawai' => $valueAbsen['IdPegawai'],
-        'Tanggal' => $valueAbsen['Tanggal'],
-        'JamDatang' => $valueAbsen['JamDatang'],
-        'JamPulang' => $valueAbsen['JamPulang'],
-        'Terlambat' => $valueAbsen['Terlambat'],
-        'Keterangan' => $valueAbsen['Keterangan'],
-        'Nama' => "",
-        'NIP' => "",
+foreach ($RowPegawai as &$valuePegawai) {
+    $DataPegawai = array(
+        'NIP' => $valuePegawai['NIP'],
+        'Nama' => $valuePegawai['Nama'],
+        'Hadir' => "",
+        'Ijin' => "",
+        'Alpa' => "",
     );
-    foreach ($RowPegawai as &$valuePegawai) {
-        if ($valueAbsen['IdPegawai'] == $valuePegawai['IdPegawai']) {
-            $DataAbsen['Nama'] = $valuePegawai['Nama'];
-            $DataAbsen['NIP'] = $valuePegawai['NIP'];
+    $Hadir = 0;
+    $Ijin = 0;
+    $Alpa = 0;
+    foreach ($RowAbsen as &$valueAbsen) {
+        if ($valuePegawai['IdPegawai'] == $valueAbsen['IdPegawai']) {
+            if ($valueAbsen['Keterangan'] == "H") {
+                $Hadir += 1;
+            } elseif ($valueAbsen['Keterangan'] == "I") {
+                $Ijin += 1;
+            } elseif ($valueAbsen['Keterangan'] == "S") {
+                $Ijin += 1;
+            } else {
+                $Alpa += 1;
+            }
         }
     }
-    array_push($Datas['records'], $DataAbsen);
+    $DataPegawai['Hadir']=$Hadir;
+    $DataPegawai['Ijin']=$Ijin;
+    $DataPegawai['Alpa']=$Alpa;
+    array_push($Datas['records'], $DataPegawai);
 }
 echo json_encode($Datas);

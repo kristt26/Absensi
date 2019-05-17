@@ -1,94 +1,11 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="Apps">
+<html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Gentelella Alela! | </title>
-
-    <!-- Bootstrap -->
-    <link href="../../../assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="../../../assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="../../../assets/vendors/nprogress/nprogress.css" rel="stylesheet">
-
-    <!-- Custom Theme Style -->
-    <link href="../../../assets/build/css/custom.min.css" rel="stylesheet">
-    <script src="../../../assets/node_modules/angular/angular.min.js"></script>
-    <script src="../../../assets/node_modules/angular/angular-animate.min.js"></script>
-    <script src="../../../assets/node_modules/angular/angular-route.min.js"></script>
-    <script src="../../Apps.js"></script>
-    <script src="../../Controller.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
-<body ng-controller="ControllerLaporan">
-    <div ng-init="Init()">
-        <!-- page content -->
-        <div class="">
-            <div class="row">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>NIP</th>
-                            <th>Nama</th>
-                            <th>Jam Datang</th>
-                            <th>Jam Pulang</th>
-                            <th>Terlambat</th>
-                            <th>Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="item in DatasLaporan">
-                            <th scope="row">{{$index+1}}</th>
-                            <td>{{item.NIP}}</td>
-                            <td>{{item.Nama}}</td>
-                            <td>{{item.JamDatang}}</td>
-                            <td>{{item.JamPulang}}</td>
-                            <td>{{item.Terlambat}}</td>
-                            <td>{{item.Keterangan}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- /page content -->
-    </div>
-    </div>
-
-    <!-- jQuery -->
-    <script src="../../../assets/vendors/jquery/dist/jquery.min.js"
-        type="20357ba6c248bbae62378380-text/javascript"></script>
-    <!-- Bootstrap -->
-    <script src="../../../assets/vendors/bootstrap/dist/js/bootstrap.min.js"
-        type="20357ba6c248bbae62378380-text/javascript"></script>
-    <!-- FastClick -->
-    <script src="../../../assets/vendors/fastclick/lib/fastclick.js"
-        type="20357ba6c248bbae62378380-text/javascript"></script>
-    <!-- NProgress -->
-    <script src="../../../assets/vendors/nprogress/nprogress.js"
-        type="20357ba6c248bbae62378380-text/javascript"></script>
-
-    <!-- Custom Theme Scripts -->
-    <script src="../../../assets/build/js/custom.min.js" type="20357ba6c248bbae62378380-text/javascript"></script>
-    <!-- Google Analytics -->
-    <script type="20357ba6c248bbae62378380-text/javascript">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-23581568-13', 'auto');
-ga('send', 'pageview');
-
-</script>
-    <script src="https://ajax.cloudflare.com/cdn-cgi/scripts/a2bd7673/cloudflare-static/rocket-loader.min.js"
-        data-cf-settings="20357ba6c248bbae62378380-|49" defer=""></script>
+<body onload="window.print()">
+    
 </body>
 
 </html>

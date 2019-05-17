@@ -48,6 +48,7 @@ var app = angular.module("CtrlIndex", [])
         var tahun = (xtahun < 1000)?xtahun + 1900 : xtahun;
         $scope.Bulan = myMonths[month];
         $scope.Hari = myDays[thisDay]; 
+        
         $scope.TanggalAbsen = $scope.Hari+", "+thisDay+" "+$scope.Bulan+" "+tahun;
 
         $scope.Init = function () {
