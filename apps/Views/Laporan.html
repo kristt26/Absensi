@@ -1,0 +1,87 @@
+<div class="row" ng-init=Init()>
+    <div class="x_title">
+        <h2>Laporan</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i
+                        class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+            <li role="presentation" class="active"><a href="" data-target="#tab_content1" id="home-tab" role="tab"
+                    data-toggle="tab" aria-expanded="true">Pegawai</a>
+            </li>
+            <li role="presentation" class=""><a href="" data-target="#tab_content2" role="tab" id="profile-tab"
+                    data-toggle="tab" aria-expanded="false">Bulanan</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                <center>
+                    <h1>Laporan Absen Pegawai</h1>
+                </center>
+                <form data-parsley-validate class="form-horizontal form-label-left input_mask pull-left"
+                    ng-submit="Simpan()">
+                    <div class="col-md-5 col-sm-4 col-xs-12 form-group has-feedback">
+                        <select class="form-control has-feedback-left"
+                            ng-options="item as item.Nama for item in Bulan track by item.Id" ng-model="selected"
+                            ng-change="GetData()" required></select>
+                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                    </div>
+                    <div class="col-md-5 col-sm-4 col-xs-12 form-group has-feedback">
+                        <select class="form-control has-feedback-left"
+                            ng-options="item as item.Nama for item in DatasPegawai track by item.Nama"
+                            ng-model="selectedPegawai" ng-change="GetData()" required></select>
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                    </div>
+                    <div class="col-md-5 col-sm-4 col-xs-12 form-group has-feedback">
+                        <a href="apps/Views/Laporan/LaporanPegawai.html" class="btn btn-success has-feedback-left" target="_blank">Print</a>
+                    </div>
+                </form>
+                <table class="table table-bordered" witdh="50%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>NIP</th>
+                            <th>Nama</th>
+                            <th>Jam Datang</th>
+                            <th>Jam Pulang</th>
+                            <th>Terlambat</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in DatasLaporan">
+                            <th scope="row">{{$index+1}}</th>
+                            <td>{{item.NIP}}</td>
+                            <td>{{item.Nama}}</td>
+                            <td>{{item.JamDatang}}</td>
+                            <td>{{item.JamPulang}}</td>
+                            <td>{{item.Terlambat}}</td>
+                            <td>{{item.Keterangan}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation
+                    +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+                    craft beer twee. Qui photo
+                    booth letterpress, commodo enim craft beer mlkshk aliquip</p>
+            </div>
+        </div>
+    </div>
+</div>

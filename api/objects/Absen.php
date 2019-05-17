@@ -45,6 +45,18 @@ class Absen
         return $stmt;
     }
 
+    public function readByRanges($TglAkhir)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE IdPegawai=? AND (Tanggal BETWEEN ? AND ?)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->IdPegawai);
+        $stmt->bindParam(2, $this->Tanggal);
+        $stmt->bindParam(3, $TglAkhir);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
     public function create()
     {
         $query = "INSERT INTO " . $this->table_name . " SET IdPegawai=?, Tanggal=?, JamDatang=?, JamPulang=?, Terlambat=?, Keterangan=?";

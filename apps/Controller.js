@@ -65,4 +65,40 @@ var app = angular.module("Ctrl", [])
 
         // Start the timer
         $timeout(tick, $scope.tickInterval);
+    })
+    .controller("LaporanController", function ($scope, $http) {
+        $scope.DatasLaporan = [];
+        $scope.DatasPegawai = [];
+        $scope.selected = {};
+        $scope.selectedPegawai = {};
+        $scope.Bulan = [{ Id: 0, Nama: "Januari" }, { Id: 1, Nama: "Februari" }, { Id: 2, Nama: "Maret" }, { Id: 3, Nama: "April" }, { Id: 4, Nama: "Mei" }, { Id: 5, Nama: "Juni" }, { Id: 6, Nama: "Juli" }, { Id: 7, Nama: "Agustus" }, { Id: 8, Nama: "September" }, { Id: 9, Nama: "Oktober" }, { Id: 10, Nama: "November" }, { Id: 11, Nama: "Desember" }];
+        $scope.Init = function () {
+            $http.get('api/datas/reads/ReadPegawai.php')
+                .then(function (response) {
+                    $scope.DatasPegawai = response.data.records;
+                })
+        }
+        $scope.GetData = function () {
+            var a = {};
+            if ($scope.selected.Id != undefined && $scope.selectedPegawai.IdPegawai != undefined) {
+                a.Id = $scope.selected.Id;
+                a.IdPegawai = $scope.selectedPegawai.IdPegawai;
+                $http({
+                    method: "POST",
+                    url: "api/datas/reads/ReadLaporan.php",
+                    data: a
+                }).then(function (response) {
+                    $scope.DatasLaporan = response.data.records;
+                });
+            }
+
+
+        }
+    })
+    .controller("ControllerLaporan", function($scope, $http){
+        $DatasLaporan = [];
+        $http.get("../../../api/datas/reads/ReadLaporanPegawai.php")
+        .then(function(response){
+            $scope.DatasLaporan = response.data.records;
+        })
     });

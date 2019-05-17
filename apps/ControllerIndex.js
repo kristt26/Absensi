@@ -107,4 +107,21 @@ var app = angular.module("CtrlIndex", [])
             })
 
         }
-    });
+    })
+    .controller("LoginController", function($scope, $http){
+        $scope.DataInput={};
+        $scope.Login=function(){
+            Url = "api/datas/reads/Login.php";
+            Data = $scope.DataInput;
+            $http({
+                method: "POST",
+                url: Url,
+                data:Data
+            }).then(function(response){
+                window.location.href = "admin.html";
+            }, function(error){
+                alert(error.data.message);
+            })
+        }
+    })
+    ;

@@ -17,6 +17,10 @@ app.config(function($routeProvider) {
             templateUrl: "apps/views/Absen.html",
             controller: "AbsenController"
         })
+        .when("/Laporan", {
+            templateUrl: "apps/views/Laporan.html",
+            controller: "LaporanController"
+        })
         .otherwise({ redirectTo: '/Main' })
 
 })
