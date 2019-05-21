@@ -43,7 +43,7 @@ if (!empty($data->IdPegawai)) {
         $absen->Tanggal = date('Y-m-d');
         $absen->JamDatang = date('H:i:s');
         $absen->Terlambat = "00:00:00";
-        $absen->Keterangan = "I";
+        $absen->Keterangan = $data->Keterangan;
         if ($absen->create()) {
             $DataPegawai = array(
                 'IdAbsen' => $absen->IdAbsen,

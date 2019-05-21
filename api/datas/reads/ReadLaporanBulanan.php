@@ -30,13 +30,20 @@ foreach ($RowPegawai as &$valuePegawai) {
     $DataPegawai = array(
         'NIP' => $valuePegawai['NIP'],
         'Nama' => $valuePegawai['Nama'],
+        'JumlahHari' => "",
         'Hadir' => "",
+        'Sakit' => "",
         'Ijin' => "",
         'Alpa' => "",
+        'Cuti' =>"",
+        'JumlahTidakHadir' =>"",
+        'Presentase' =>""
     );
     $Hadir = 0;
     $Ijin = 0;
+    $Sakit = 0;
     $Alpa = 0;
+    $Cuti =0;
     foreach ($RowAbsen as &$valueAbsen) {
         if ($valuePegawai['IdPegawai'] == $valueAbsen['IdPegawai']) {
             if ($valueAbsen['Keterangan'] == "H") {
@@ -44,15 +51,22 @@ foreach ($RowPegawai as &$valuePegawai) {
             } elseif ($valueAbsen['Keterangan'] == "I") {
                 $Ijin += 1;
             } elseif ($valueAbsen['Keterangan'] == "S") {
-                $Ijin += 1;
-            } else {
+                $Sakit += 1;
+            } elseif ($valueAbsen['Keterangan'] == "Cuti") {
+                $Cuti += 1;
+            }else {
                 $Alpa += 1;
             }
         }
     }
+    $DataPegawai['JumlahHari']=$data->JumlahHari;
     $DataPegawai['Hadir']=$Hadir;
     $DataPegawai['Ijin']=$Ijin;
+    $DataPegawai['Sakit']=$Sakit;
+    $DataPegawai['Cuti']=$Cuti;
     $DataPegawai['Alpa']=$Alpa;
+    $DataPegawai['JumlahTidakHadir']=$Alpa+$Sakit+$Ijin+$Cuti;
+    $DataPegawai['Presentase']=$Hadir/$data->JumlahHari*100;
     array_push($Datas['records'], $DataPegawai);
 }
 echo json_encode($Datas);

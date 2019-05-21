@@ -60,6 +60,8 @@ var app = angular.module("Ctrl", [])
         $scope.DatasAbsen = [];
         $scope.selected = {};
         $scope.DataInput = {};
+        $scope.ListKeterangan = [{Nama:"Ijin", Value:"I"}, {Nama:"Sakit", Value:"S"},{Nama:"Cuti", Value:"Cuti"}];
+        $scope.SelectedKeterangan = {};
         $scope.TanggalAbsen="";
         var myMonths = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -95,6 +97,7 @@ var app = angular.module("Ctrl", [])
             $scope.DataInput.IdPegawai = $scope.selected.IdPegawai;
             $scope.DataInput.Tanggal = $scope.Tanggal;
             $scope.DataInput.Jam = $scope.Jam;
+            $scope.DataInput.Keterangan = $scope.SelectedKeterangan.Value;
             var Url = "api/datas/creates/CreateAbsenAdmin.php";
             var Data = angular.copy($scope.DataInput);
             $http({
@@ -134,6 +137,7 @@ var app = angular.module("Ctrl", [])
         $scope.DatasPegawai = [];
         $scope.selected = {};
         $scope.selectedPegawai = {};
+        $scope.DataInput={};
         $scope.Bulan = [{ Id: 0, Nama: "Januari" }, { Id: 1, Nama: "Februari" }, { Id: 2, Nama: "Maret" }, { Id: 3, Nama: "April" }, { Id: 4, Nama: "Mei" }, { Id: 5, Nama: "Juni" }, { Id: 6, Nama: "Juli" }, { Id: 7, Nama: "Agustus" }, { Id: 8, Nama: "September" }, { Id: 9, Nama: "Oktober" }, { Id: 10, Nama: "November" }, { Id: 11, Nama: "Desember" }];
         $scope.Init = function () {
             $http.get('api/datas/reads/ReadPegawai.php')
@@ -155,17 +159,40 @@ var app = angular.module("Ctrl", [])
                 });
             }
         }
-        $scope.GetBulan = function (){
-            $http({
-                method: "POST",
-                url: "api/datas/reads/ReadLaporanBulanan.php",
-                data: $scope.selected
-            }).then(function (response) {
-                $scope.DatasLaporan = response.data.records;
-            });
+        $scope.clear=function(){
+            $scope.DataInput={};
+            $scope.DatasLaporan=[];
+            $scope.selected = {};
+            $scope.selectedPegawai = {};
         }
-        $scope.printToCart = function (printSectionId) {
-            var innerContents = document.getElementById(printSectionId).innerHTML;
+        
+        $scope.GetBulan = function (){
+            if ($scope.selected.Id != undefined && $scope.DataInput.JumlahHari != undefined) {
+                if($scope.DataInput.JumlahHari != ""){
+                    $scope.DataInput.Id=$scope.selected.Id;
+                    $http({
+                        method: "POST",
+                        url: "api/datas/reads/ReadLaporanBulanan.php",
+                        data: $scope.DataInput
+                    }).then(function (response) {
+                        $scope.DatasLaporan = response.data.records;
+                    });
+                }else
+                {
+                    $scope.DatasLaporan=[];
+                }
+                
+            }
+        }
+        $scope.printLaporanPegawai = function (IdPegawai) {
+            var innerContents = document.getElementById(IdPegawai).innerHTML;
+            var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+            popupWinindow.document.open();
+            popupWinindow.document.write('<html><head><link href="assets/index/css/bootstrap.min.css" rel="stylesheet"></head><body onload="window.print()"><div>' + innerContents + '</html>');
+            popupWinindow.document.close();
+        }
+        $scope.printLaporanBulanan = function (IdBulanan) {
+            var innerContents = document.getElementById(IdBulanan).innerHTML;
             var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
             popupWinindow.document.open();
             popupWinindow.document.write('<html><head><link href="assets/index/css/bootstrap.min.css" rel="stylesheet"></head><body onload="window.print()"><div>' + innerContents + '</html>');

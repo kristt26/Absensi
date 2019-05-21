@@ -45,11 +45,12 @@ var app = angular.module("CtrlIndex", [])
         var month = new Date().getMonth();
         var thisDay = new Date().getDay();
         var xtahun = new Date().getYear();
+        var xTanggal = new Date().getDate();
         var tahun = (xtahun < 1000)?xtahun + 1900 : xtahun;
         $scope.Bulan = myMonths[month];
         $scope.Hari = myDays[thisDay]; 
         
-        $scope.TanggalAbsen = $scope.Hari+", "+thisDay+" "+$scope.Bulan+" "+tahun;
+        $scope.TanggalAbsen = $scope.Hari+", "+xTanggal+" "+$scope.Bulan+" "+tahun;
 
         $scope.Init = function () {
             var Url = "api/datas/reads/ReadPegawai.php";

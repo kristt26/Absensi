@@ -21,10 +21,10 @@
     </div>
     <div class="" role="tabpanel" data-example-id="togglable-tabs">
         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-            <li role="presentation" class="active"><a href="" data-target="#tab_content1" id="home-tab" role="tab"
+            <li role="presentation" class="active"><a href="" data-target="#tab_content1" id="home-tab" ng-click="clear()" role="tab"
                     data-toggle="tab" aria-expanded="true">Pegawai</a>
             </li>
-            <li role="presentation" class=""><a href="" data-target="#tab_content2" role="tab" id="profile-tab"
+            <li role="presentation" class=""><a href="" data-target="#tab_content2" role="tab" id="profile-tab" ng-click="clear()"
                     data-toggle="tab" aria-expanded="false">Bulanan</a>
             </li>
         </ul>
@@ -47,12 +47,12 @@
                         </div>
                         <div class="col-md-4 col-sm-6 col-xs-12 form-group has-feedback">
                             <a href="" class="btn btn-success has-feedback-left"
-                                ng-click="printToCart('printSectionId')">Print</a>
+                                ng-click="printLaporanPegawai('IdPegawai')">Print</a>
                         </div>
                     </form>
                 </div>
 
-                <div id="printSectionId" class="row">
+                <div id="IdPegawai" class="row">
 
                     <center>
                         <h1>Laporan Absen Pegawai</h1>
@@ -84,57 +84,73 @@
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
-                    <div class="col-xs-12">
-                            <form data-parsley-validate class="form-horizontal form-label-left input_mask pull-left"
-                                ng-submit="Simpan()">
-                                <div class="col-md-8 col-sm-9 col-xs-12 form-group has-feedback">
-                                    <select class="form-control has-feedback-left"
+                    <form data-parsley-validate class="form-horizontal form-label-left input_mask pull-left"
+                        ng-submit="Simpan()">
+                        <div class="col-md-4 col-sm-7 col-xs-12 form-group has-feedback">
+                            <select class="form-control has-feedback-left"
+                                ng-options="item as item.Nama for item in Bulan track by item.Id" ng-model="selected"
+                                ng-change="GetBulan()" required></select>
+                            <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                        </div>
+                        <div class="col-md-5 col-sm-7 col-xs-12 form-group has-feedback">
+                            <input type="text" class="form-control has-feedback-left" placeholder="Jumlah Hari Kerja"
+                                ng-model="DataInput.JumlahHari" ng-change="GetBulan()" />
+                            <!-- <select class="form-control has-feedback-left"
                                         ng-options="item as item.Nama for item in Bulan track by item.Id" ng-model="selected"
-                                        ng-change="GetBulan()" required></select>
-                                    <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-                                </div>
-                                <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
-                                    <a href="" class="btn btn-success has-feedback-left"
-                                        ng-click="printToCart('printSectionId')">Print</a>
-                                </div>
-                            </form>
+                                        ng-change="GetBulan()" required></select> -->
+                            <span class="fa fa-circle-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
-        
-                        <div id="printSectionId" class="row">
-        
-                            <center>
-                                <h1>Laporan Absen Bulan</h1>
-                                <h3>{{selected.Nama}}</h3>
-                            </center>
-                            <br>
-                            <table class="table table-bordered" witdh="50%">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2" class="text-center">No</th>
-                                        <th rowspan="2" class="text-center">NIP</th>
-                                        <th rowspan="2" class="text-center">Nama</th>
-                                        <th colspan="4" class="text-center">Keterangan</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center">H</th>
-                                        <th class="text-center">S</th>
-                                        <th class="text-center">I</th>
-                                        <th class="text-center">A</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="item in DatasLaporan">
-                                        <th scope="row">{{$index+1}}</th>
-                                        <td>{{item.NIP}}</td>
-                                        <td>{{item.Nama}}</td>
-                                        <td>{{item.Hadir}}</td>
-                                        <td>{{item.Sakit}}</td>
-                                        <td>{{item.Ijin}}</td>
-                                        <td>{{item.Alpa}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="col-md-3 col-sm-6 col-xs-12 form-group has-feedback">
+                            <a href="" class="btn btn-success has-feedback-left"
+                                ng-click="printLaporanBulanan('IdBulanan')">Print</a>
                         </div>
+                    </form>
+
+                <div id="IdBulanan" class="row">
+
+                    <center>
+                        <h1>Laporan Absen Bulan</h1>
+                        <h3>{{selected.Nama}}</h3>
+                    </center>
+                    <br>
+                    <table class="table table-bordered" witdh="50%">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="text-center">No</th>
+                                <th rowspan="2" class="text-center">NIP</th>
+                                <th rowspan="2" class="text-center">Nama</th>
+                                <th rowspan="2" class="text-center">Jumlah Hari Kerja</th>
+                                <th colspan="5" class="text-center">Keterangan</th>
+                                <th rowspan="2" class="text-center">Jumlah Hadir</th>
+                                <th rowspan="2" class="text-center">Jumlah Tidak Hadir</th>
+                                <th rowspan="2" class="text-center">Presentasi</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">H</th>
+                                <th class="text-center">S</th>
+                                <th class="text-center">I</th>
+                                <th class="text-center">A</th>
+                                <th class="text-center">Cuti</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in DatasLaporan">
+                                <th scope="row">{{$index+1}}</th>
+                                <td>{{item.NIP}}</td>
+                                <td>{{item.Nama}}</td>
+                                <td>{{item.JumlahHari}}</td>
+                                <td>{{item.Hadir}}</td>
+                                <td>{{item.Sakit}}</td>
+                                <td>{{item.Ijin}}</td>
+                                <td>{{item.Alpa}}</td>
+                                <td>{{item.Cuti}}</td>
+                                <td>{{item.Hadir}}</td>
+                                <td>{{item.JumlahTidakHadir}}</td>
+                                <td>{{item.Presentase}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-</div>
