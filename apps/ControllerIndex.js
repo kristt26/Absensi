@@ -39,18 +39,19 @@ var app = angular.module("CtrlIndex", [])
         $scope.DatasAbsen = [];
         $scope.selected = {};
         $scope.DataInput = {};
-        $scope.TanggalAbsen="";
+        $scope.TanggalAbsen = "";
+        $scope.DataNIP;
         var myMonths = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         var month = new Date().getMonth();
         var thisDay = new Date().getDay();
         var xtahun = new Date().getYear();
         var xTanggal = new Date().getDate();
-        var tahun = (xtahun < 1000)?xtahun + 1900 : xtahun;
+        var tahun = (xtahun < 1000) ? xtahun + 1900 : xtahun;
         $scope.Bulan = myMonths[month];
-        $scope.Hari = myDays[thisDay]; 
-        
-        $scope.TanggalAbsen = $scope.Hari+", "+xTanggal+" "+$scope.Bulan+" "+tahun;
+        $scope.Hari = myDays[thisDay];
+
+        $scope.TanggalAbsen = $scope.Hari + ", " + xTanggal + " " + $scope.Bulan + " " + tahun;
 
         $scope.Init = function () {
             var Url = "api/datas/reads/ReadPegawai.php";
@@ -69,59 +70,65 @@ var app = angular.module("CtrlIndex", [])
         }
 
         $scope.Simpan = function () {
-            var JamSistem = Date.now();
-            $scope.Tanggal = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.Jam = $filter('date')(new Date(), 'HH:mm:ss');
-            $scope.DataInput.IdPegawai = $scope.selected.IdPegawai;
-            $scope.DataInput.Tanggal = $scope.Tanggal;
-            $scope.DataInput.Jam = $scope.Jam;
-            var Url = "api/datas/creates/CreateAbsen.php";
-            var Data = angular.copy($scope.DataInput);
-            $http({
-                method: "POST",
-                url: Url,
-                data: Data
-            }).then(function (response) {
-                if (response.status == 200) {
-                    if(response.data.Status=="Insert"){
-                        var a = angular.copy(response.data);
-                        angular.forEach($scope.DatasPegawai, function(value, key){
-                            if(value.IdPegawai==a.IdPegawai){
-                                a.Nama= value.Nama;
-                                a.NIP = value.NIP;
+            angular.forEach($scope.DatasPegawai, function (value, key) {
+                if (value.NIP == $scope.DataNIP) {
+                    $scope.DataInput.NIP = $scope.DataNIP;
+                    var JamSistem = Date.now();
+                    $scope.Tanggal = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $scope.Jam = $filter('date')(new Date(), 'HH:mm:ss');
+                    $scope.DataInput.IdPegawai = value.IdPegawai;
+                    $scope.DataInput.Tanggal = $scope.Tanggal;
+                    $scope.DataInput.Jam = $scope.Jam;
+                    var Url = "api/datas/creates/CreateAbsen.php";
+                    var Data = angular.copy($scope.DataInput);
+                    $http({
+                        method: "POST",
+                        url: Url,
+                        data: Data
+                    }).then(function (response) {
+                        if (response.status == 200) {
+                            if (response.data.Status == "Insert") {
+                                var a = angular.copy(response.data);
+                                angular.forEach($scope.DatasPegawai, function (value, key) {
+                                    if (value.IdPegawai == a.IdPegawai) {
+                                        a.Nama = value.Nama;
+                                        a.NIP = value.NIP;
+                                    }
+                                });
+                                $scope.DatasAbsen.push(angular.copy(a));
+                            } else {
+                                var a = angular.copy(response.data);
+                                angular.forEach($scope.DatasAbsen, function (value, key) {
+                                    if (value.IdPegawai == $scope.DataInput.IdPegawai) {
+                                        value.JamPulang = a.JamPulang;
+                                    }
+                                });
                             }
-                        });
-                        $scope.DatasAbsen.push(angular.copy(a));
-                    }else{
-                        var a = angular.copy(response.data);
-                        angular.forEach($scope.DatasAbsen, function(value, key){
-                            if(value.IdPegawai==$scope.DataInput.IdPegawai){
-                                value.JamPulang = a.JamPulang;
-                            }
-                        });
-                    }
-                }else{
-                    alert(response.data.message);
-                }
+                        } else {
+                            alert(response.data.message);
+                        }
 
-            }, function (error) {
-                alert(error.data.message);
-            })
+                    }, function (error) {
+                        alert(error.data.message);
+                    })
+                }
+            });
+
 
         }
     })
-    .controller("LoginController", function($scope, $http){
-        $scope.DataInput={};
-        $scope.Login=function(){
+    .controller("LoginController", function ($scope, $http) {
+        $scope.DataInput = {};
+        $scope.Login = function () {
             Url = "api/datas/reads/Login.php";
             Data = $scope.DataInput;
             $http({
                 method: "POST",
                 url: Url,
-                data:Data
-            }).then(function(response){
+                data: Data
+            }).then(function (response) {
                 window.location.href = "admin.html";
-            }, function(error){
+            }, function (error) {
                 alert(error.data.message);
             })
         }
